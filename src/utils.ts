@@ -8,3 +8,8 @@ export function generate() {
     }
     return ans;
 }
+
+
+ export const normalizePath = (path:string) => {
+    return path.replace(/\\/g, '/');
+};

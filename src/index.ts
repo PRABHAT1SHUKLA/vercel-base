@@ -9,11 +9,15 @@
 
 import express from "express"
 import cors from  "cors"
-import { generate } from "./utils";
+import { generate, normalizePath } from "./utils";
 import simpleGit from "simple-git";
 import path from "path";
 import { getAllFiles } from "./file";
+import { uploadFile } from "./aws";
+
 const app = express();
+
+
 
 app.use(express.json())
 app.use(cors());
@@ -30,6 +34,12 @@ console.log(__dirname)
     await simpleGit().clone(repoUrl , path.join(__dirname,`output/${id}`));
 
     const files = getAllFiles(path.join(__dirname,`output/${id}`))
+    
+    files.forEach(async file =>{
+        const updatedaddress = normalizePath(file.slice(__dirname.length+1))
+        await uploadFile(updatedaddress,file)
+    })
+
     console.log(files)
     res.json({
         id:id

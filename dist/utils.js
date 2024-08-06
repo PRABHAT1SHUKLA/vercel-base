@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.normalizePath = void 0;
 exports.generate = generate;
 const MAX_LEN = 5;
 function generate() {
@@ -10,3 +11,7 @@ function generate() {
     }
     return ans;
 }
+const normalizePath = (path) => {
+    return path.replace(/\\/g, '/');
+};
+exports.normalizePath = normalizePath;
