@@ -14,6 +14,10 @@ import simpleGit from "simple-git";
 import path from "path";
 import { getAllFiles } from "./file";
 import { uploadFile } from "./aws";
+import { createClient } from "redis";
+const publisher = createClient();
+publisher.connect();
+
 
 const app = express();
 
@@ -39,8 +43,9 @@ console.log(__dirname)
         const updatedaddress = normalizePath(file.slice(__dirname.length+1))
         await uploadFile(updatedaddress,file)
     })
+  
+    publisher.lPush("build-queue", id);
 
-    console.log(files)
     res.json({
         id:id
     })
